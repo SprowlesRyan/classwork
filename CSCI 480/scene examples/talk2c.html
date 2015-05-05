@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - geometry - cube</title>
+		<meta charset="utf-8">
+		<style>
+			body {
+				margin: 0px;
+				background-color: #f0f0f0;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
+		<script src="https://rawgithub.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+		
+		<script>
+
+			var camera, scene, renderer;
+			var controls;
+
+			init();
+			render();
+
+			function init() {
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				
+				document.body.appendChild( renderer.domElement );
+
+				scene = new THREE.Scene();
+
+				// vertical field of view angle in degrees, aspect ratio, near clip, far clip.
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+				camera.position.set(0, 0, 800);
+  
+				controls = new THREE.OrbitControls(camera);
+				controls.addEventListener( 'change', render );
+				
+				var ambLight = new THREE.AmbientLight(0x000044);
+				scene.add(ambLight);
+				var dirLight = new THREE.DirectionalLight( 0xffffff );
+				dirLight.position.set( 1, 1, 1 ).normalize();
+				dirLight.castShadow = true;
+				// Opacity of shadow: 0 no shadow, 1 pure black.
+				dirLight.shadowDarkness = 0.5;
+				// Helps debug shadow casting.
+				// dirLight.shadowCameraVisible = true;
+				scene.add( dirLight );
+
+				var geometry_1 = new THREE.BoxGeometry( 200, 200, 200 );
+				var material_1 = new THREE.MeshLambertMaterial( 
+				  { color: new THREE.Color("rgb(255,0,0)"),
+				    ambient: new THREE.Color("rgb(100,0,0)"),
+				    shading: THREE.FlatShading,
+				  } );
+				var mesh_1 = new THREE.Mesh( geometry_1, material_1 );
+				mesh_1.position.x = -200;
+				mesh_1.receiveShadow = false;
+				mesh_1.castShadow = true;
+				scene.add( mesh_1 );
+			
+				var geometry_2 = new THREE.BoxGeometry( 200, 200, 200 );
+				var material_2 = new THREE.MeshLambertMaterial( 
+				  { color: new THREE.Color("rgb(0,0,255)"),
+				    ambient: new THREE.Color("rgb(0,0,100)"),
+				    shading: THREE.FlatShading,
+				  } );
+				var mesh_2 = new THREE.Mesh( geometry_2, material_2 );
+				mesh_2.position.x = 200;
+				mesh_2.receiveShadow = false;
+				mesh_2.castShadow = true;
+				scene.add( mesh_2 );
+
+				var geometry_3 = new THREE.PlaneGeometry(1200,1200);
+				var material_3 = new THREE.MeshLambertMaterial( 
+				  { color: new THREE.Color("rgb(0,200,0)"),
+				    ambient: new THREE.Color("rgb(0,50,0)"),
+				    shading: THREE.FlatShading,
+				  } );
+				var ground = new THREE.Mesh(geometry_3, material_3);
+				ground.position.y = -100;
+				ground.rotation.x = -Math.PI/2; // -90 degrees.
+				ground.receiveShadow = true;
+				ground.castShadow = false;
+				scene.add(ground);
+				
+				renderer.shadowMapEnabled = true;
+				renderer.shadowMapSoft = true;
+				renderer.shadowCameraNear = 3;
+				renderer.shadowCameraFar = camera.far;
+				renderer.shadowCameraFov = 50;
+				renderer.shadowMapWidth = 512;
+				renderer.shadowMapHeight = 512;
+				renderer.shadowMapDarkness = 0.5;
+				renderer.shadowMapBias = 0.0039;
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function render() {
+				renderer.render( scene, camera );
+			}
+
+		</script>
+
+	</body>
+</html>

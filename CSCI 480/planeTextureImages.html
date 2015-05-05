@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Row of Textured Rectangles</title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+    <style>
+        body{
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+	// Global variables will be visible to all functions in this script.
+	var camera, scene, renderer;
+		
+	// Call function to initialize scene contents.	
+	initScene();
+	// Call function to draw the scene repeatedly.
+	animateScene();
+
+	/*
+	 * initScene
+	 * Initializes scene to contain six textured rectangles.
+	 */
+	function initScene() 
+	{
+		// Create a new WebGL renderer that will draw the scene.
+		renderer = new THREE.WebGLRenderer();
+		// Set background color.
+		renderer.setClearColor(new THREE.Color("rgb(60,60,60)"));
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		// add the output of the renderer to the html element
+		$("#WebGL-output").append(renderer.domElement);
+        
+		// Create an empty scene container.
+		scene = new THREE.Scene();
+			
+		// Create an orthographic camera which does not
+		// make objects appear smaller as they are farther
+		// away.  Orthographic camera view is useful for 
+		// two-dimensional drawing since the Z-coordinate
+		// is simply used to determine which object appears
+		// in front of another when they overlap in XY.
+		// 
+		// Set orthographic camera view with parameters:
+		// Left edge x-coordinate (-X)
+		// Right edge x-coordinate (+X)
+		// Top edge y-coordinate (+Y)
+		// Bottom edge y-coordinate (-Z)
+		// Front clip face z-coordinate (+Z)
+		// Rear clip face z-coordinate (+Z)
+		// front clip distance < rear clip distance.
+		// Choose front and rear clip distances so that
+		// your objects lie between these two faces.
+		var aspectRatio = window.innerWidth / window.innerHeight;
+		var height = 10.0;
+		var leftX = -aspectRatio * height;
+		var rightX = aspectRatio * height;
+		camera = new THREE.OrthographicCamera(leftX,rightX, height,-height, 0, 100 );
+		camera.position.set(0, 0, 10);
+		camera.lookAt(scene.position);
+			
+		// Declare local variables that are visible only within this
+		// function.  Here we declare empty array objects one per
+		// textured rectangle.
+		var planeGeometry = [];
+		var materialImage = [], planeMesh = [], texture = [];
+		// Array of strings one per texture image filename.
+		var imageNames = [ 'apple.png', 'grapes.png', 'lemon.png',
+		                   'lime.png', 'orange.png', 'peach.png' ];
+		
+		// Size of each rectangle onto which will be painted one image.
+		var planeSize = 8.0;
+		// Location of the center of the first rectangle inside our
+		// Orthographic view.
+		var x = leftX + 0.5*planeSize;
+		var y = -height + 0.5*planeSize;
+		
+		// Loop through each image file name in our array.
+		for(var i = 0; i < imageNames.length; i++)
+		{
+		  planeGeometry[i] = new THREE.PlaneGeometry(planeSize, planeSize);		
+		  materialImage[i] = new THREE.MeshBasicMaterial();	
+		  // Important note: Loading of an image takes some time.
+		  // There are several ways to insure that we render the
+		  // scene after having loaded all images:
+		  // (a) This solution - repeatedly re-paint the scene.
+		  // (b) Alternate - define a callback function that triggers
+		  //     drawing the scene once after loading is complete.
+		  texture[i] = THREE.ImageUtils.loadTexture(imageNames[i]);
+		  materialImage[i].map = texture[i];
+						
+		  // Create plane mesh.  One great feature about using the
+		  // built-in Three.JS PlaneGeometry is that it has UV
+		  // texture coordinates already assigned to each vertex.
+		  planeMesh[i] = new THREE.Mesh( planeGeometry[i], materialImage[i] );
+		  // Set the location of the center of each rectangle.
+		  planeMesh[i].position.set(x, y, 4);
+		  // Add textured rectangle to our scene.
+		  scene.add( planeMesh[i] );
+		  
+		  // Advance position of next rectangle to the right.
+		  // Multiply planeSize x 1.1 to allow a space between each.
+		  x = x + 1.1*planeSize;
+		  // Begin a new row when we find that the next rectangle 
+		  // would lie partly or entirely beyond the right edge of
+		  // our orthographic viewport.
+		  if((x + 0.5*planeSize) > rightX)
+		  {
+		    // Re-set x coordinate to initial x-coordinate.
+		    x = leftX + 0.5*planeSize;
+		    // Advance to next row moving up.
+		    y = y + 1.1*planeSize;
+		  }
+		}// end for i loop over textured images.
+	}
+			
+	/*
+	 * animateScene
+	 * Repeatedly redraw the scene so that we insure that we draw our
+	 * scene at least once after all texture images have been loaded.
+	 */
+	function animateScene() 
+	{
+		requestAnimationFrame( animateScene );
+		renderer.render( scene, camera );
+	}
+
+		</script>
+	</body>
+</html>

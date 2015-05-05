@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Ryan Sprowles THREE.js Homework 2</title>
+		<meta charset="utf-8">
+		<style>
+			body {
+				margin: 0px;
+				background-color: #000000;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
+		<script src="https://rawgithub.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+
+		<script>
+
+			// Importing objects made from clara.io
+		
+			// Global variables whose names are visible to
+			// all functions in this program.
+			var camera, scene, renderer;
+			// Orbit controller must be in the global name space
+			// since it must be able to call the render function.
+			var controls;
+
+			// Call init function to setup our scene.
+			init();
+			// Call render function to draw the scene the first time.
+			render();
+
+			function init() {
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				// Create a camera.
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.z = 10;
+				// Mouse motions will control the camera.
+			        controls = new THREE.OrbitControls(camera);
+				// Call render function anytime we move our mouse.
+				controls.addEventListener( 'change', render );
+
+				// Create an empty scene container.
+				scene = new THREE.Scene();
+				
+				var loader = new THREE.ObjectLoader();
+				parse: function ( json ) {
+
+				var geometries = this.parseGeometries( json.geometries );
+				var materials = this.parseMaterials( json.materials );
+				var object = this.parseObject( json.object, geometries, materials );
+
+				scene.add(object);
+
+	},
+
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function render() {
+				renderer.render( scene, camera );
+			}
+
+		</script>
+
+	</body>
+</html>

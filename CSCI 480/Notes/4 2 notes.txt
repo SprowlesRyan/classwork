@@ -1,0 +1,26 @@
+Ambiant (Isub(a)) = .2					N(0,1,0)
+Diffuse (Isub(d)) = .8					L(10,10,0)
+										Point Light(12,4,0)
+										P(2,-6,0)
+Ramb  (Rsub(a)) = .5
+Rdiff (Rsub(d)) = .6
+
+S = L dot N = (0,1,0)*(root(2)/2,root(2)/2,0) = root(2)/2
+
+0.5*0.2 + 0.8*0.6 * NdotL = 0.439 
+0.1 + 0.339 = 0.439
+
+Ambiant = Isub(a)*Rsub(a) = 0.2*0.5 = 0.1
+Diffuse = Isub(d)*Rsub(d)*NdotL = 0.8*0.6*root(2)/2= 0.339
+
+Triangle with point (x = 10, y =10) intensity 0.8
+					(x = 0, y = 0)  intentisy 0.4
+					(x = 20, y = 0) intensity 0.6
+
+.4 to .8 at 30% distance
+0.3*(0.8-0.4) = 0.3 * 0.4=.12
+then origial 0.4 + 0.12 = .52
+
+.6 to .8 at 30% distance
+0.3 * (0.8-0.6) = 0.3 * 0.2 = 0.06
+0.6 + 0.06 = 0.66

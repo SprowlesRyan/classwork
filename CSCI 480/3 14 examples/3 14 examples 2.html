@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Scaling Size Transform</title>
+		<meta charset="utf-8">
+		<style>
+			body {
+				margin: 0px;
+				background-color: #000000;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
+		<script src="https://rawgithub.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+
+		<script>
+
+			// Draws three different colored cones in a row
+			// by using scale and position commands.
+		
+			// Global variables whose names are visible to
+			// all functions in this program.
+			var camera, scene, renderer;
+			// Orbit controller must be in the global name space
+			// since it must be able to call the render function.
+			var controls;
+
+			// Call init function to setup our scene.
+			init();
+			// Call render function to draw the scene the first time.
+			render();
+
+			function init() {
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				// Create a camera.
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.z = 10;
+				// Mouse motions will control the camera.
+			        controls = new THREE.OrbitControls(camera);
+				// Call render function anytime we move our mouse.
+				controls.addEventListener( 'change', render );
+
+				// Create an empty scene container.
+				scene = new THREE.Scene();
+
+				// Create a cone having:
+				// top radius of 0, bottom radius of 2,
+				// height of 3, and whose base is formed
+				// by a circle divided into 16 triangle wedges.
+				var geometry1 = new THREE.CylinderGeometry(0, 2, 3, 16 );
+
+				// Solid red material color for wireframe/line
+				// style drawing.  Draw only the lines of the
+				// polygon mesh.
+				var materialRed = new THREE.MeshBasicMaterial();
+				materialRed.color = new THREE.Color("rgb(255,0,0)");
+				materialRed.wireframe = true;
+				materialRed.wireframeLineWidth = 2;
+				
+				// Solid green material color for wireframe/line
+				// style drawing.  Draw only the lines of the
+				// polygon mesh.
+				var materialGreen = new THREE.MeshBasicMaterial();
+				materialGreen.color = new THREE.Color("rgb(0,255,0)");
+				materialGreen.wireframe = true;
+				materialGreen.wireframeLineWidth = 2;
+
+				// Solid blue material color for wireframe/line
+				// style drawing.  Draw only the lines of the
+				// polygon mesh.
+				var materialBlue = new THREE.MeshBasicMaterial();
+				materialBlue.color = new THREE.Color("rgb(0,0,255)");
+				materialBlue.wireframe = true;
+				materialBlue.wireframeLineWidth = 2;
+				
+				// Create objects in our scene.
+				// (1) Red cone at origin with tip pointing up +Y
+				var coneMeshRed = new THREE.Mesh( geometry1, materialRed );
+				coneMeshRed.position.set(0,0,0);
+				scene.add( coneMeshRed );
+
+				// (2) Green cone that is 3 units away from red cone along +X axis.
+				// We can re-use the same geometry when creating new meshes.
+				var coneMeshGreen = new THREE.Mesh( geometry1, materialGreen );
+				
+				// Set transformations applied to this mesh.
+				// Set absolute position to be initially that of the red cone.
+				coneMeshGreen.scale.x = 2.0;
+				coneMeshGreen.scale.y = 2.0;
+				coneMeshGreen.scale.z = 2.0;
+				coneMeshGreen.position.x = coneMeshRed.position.x;
+				coneMeshGreen.position.y = coneMeshRed.position.y;
+				coneMeshGreen.position.z = coneMeshRed.position.z;
+				// Add +6 to x-coordinate of green cone's current position.
+				coneMeshGreen.translateX(6);
+				// coneMeshGreen.scale.x = 2.0;
+				// coneMeshGreen.scale.y = 2.0;
+				// coneMeshGreen.scale.z = 2.0;
+				scene.add( coneMeshGreen );
+				
+				// (3) Blue cone that is 3 units away from red cone along -X axis.
+				var coneMeshBlue = new THREE.Mesh( geometry1, materialBlue );
+				
+				// Set transformations applied to this mesh.
+				// Set absolute position to be initially that of the red cone.
+				coneMeshBlue.position.x = coneMeshRed.position.x;
+				coneMeshBlue.position.y = coneMeshRed.position.y;
+				coneMeshBlue.position.z = coneMeshRed.position.z;
+				
+				//*** 
+				// Note on order of transformations.
+				// When Three.JS renders the scene, it applies
+				// transforms of position, rotation, and scale
+				// in the order of first scale, second rotation.z,
+				// third rotation.y, fourth rotation.z, and fifth
+				// position.
+				// Observe how the green and blue cones
+				// reverse the order of their scale and translate
+				// statements and we still get the same effect.
+				coneMeshBlue.scale.x = 3.0;
+				coneMeshBlue.scale.y = 3.0;
+				coneMeshBlue.scale.z = 3.0;
+				// Move blue cone -9 units along X-axis.
+				coneMeshBlue.translateX(-9);
+				scene.add( coneMeshBlue );
+
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function render() {
+				renderer.render( scene, camera );
+			}
+
+		</script>
+
+	</body>
+</html>

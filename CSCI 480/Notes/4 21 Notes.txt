@@ -1,0 +1,28 @@
+Lighting - 	Reflectance					Light Source
+			ambient						Ia * Ra			I light intensity R material reflectance
+			diffuse						Id * Rd (NdotL) unit Lengh N normal vector, L vector from point to light NdotL about cos(Theta)
+			specular					Is * Rs (RdotV)^exp V vector to camera R reflection of L higher exponent, less focus
+Point light vs infinite light
+affects R and L
+Point light harder to compute
+Each point will be different vs same
+
+Shading - 	1. Compute lighting at 1 point on the polygon, fill color in every pixel in polygon (flat shading)
+			2. Computes lighting at the verticies, intropolation inward afterwards (gourand shading)
+			3. Computes lighting at every pixel (Phone shading)
+
+Texture - specify UV value
+			From pixel image
+				tells where in that thing its being taken from
+				Interpolation to fill things in
+				Stretching and compression is a problem
+					Choose coordinates to be comprable to the the mapping
+				Aliasing
+					Too few pixels trying to represent an area
+					Long draw distance, Mo are pattern
+					Average them, blur the pixels at a distance
+					Mip Mapping
+						Take original texture and take average of the colors and fill in, 2k by 2k to 1k by 1k
+							2 pixels, average  into 1
+				Anti-Aliasing
+					

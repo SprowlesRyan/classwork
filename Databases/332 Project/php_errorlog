@@ -1,0 +1,10 @@
+[03-Dec-2014 18:48:58 America/Chicago] PHP Parse error:  syntax error, unexpected ';' in /home/ryans299/public_html/questUpdate.php on line 11
+[03-Dec-2014 20:12:52 America/Chicago] PHP Parse error:  syntax error, unexpected ';' in /home/ryans299/public_html/questUpdate.php on line 9
+[03-Dec-2014 21:00:45 America/Chicago] PHP Parse error:  syntax error, unexpected '$sql' (T_VARIABLE), expecting ',' or ';' in /home/ryans299/public_html/quests.php on line 6
+[03-Dec-2014 21:15:24 America/Chicago] PHP Parse error:  syntax error, unexpected '<' in /home/ryans299/public_html/quests.php on line 24
+[03-Dec-2014 21:16:20 America/Chicago] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/ryans299/public_html/quests.php on line 25
+[03-Dec-2014 21:16:21 America/Chicago] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/ryans299/public_html/quests.php on line 25
+[03-Dec-2014 21:16:44 America/Chicago] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/ryans299/public_html/quests.php on line 25
+[03-Dec-2014 21:16:45 America/Chicago] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/ryans299/public_html/quests.php on line 25
+[04-Dec-2014 18:08:52 America/Chicago] PHP Parse error:  syntax error, unexpected '$sql' (T_VARIABLE), expecting ',' or ';' in /home/ryans299/public_html/Inventory.php on line 6
+[04-Dec-2014 18:28:51 America/Chicago] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO), expecting ',' or ';' in /home/ryans299/public_html/view.php on line 14

@@ -1,0 +1,6 @@
+1. The boosting algorithm is used to try and make a set of weak learners into a strong learner.
+	The weak learners learn from the mistakes of other weak learners and don't make the mistakes
+	that previous weak learners misclassified.
+2. The bagging algorithm is used to improve stability and accuracy, but  it's main purpose is to
+	reduce variance and help avoid overfitting.
+3.

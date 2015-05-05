@@ -1,0 +1,5 @@
+<form action="monsterInsert.php">
+id: <input type="text" name="name"><br>
+alive: <input type="Boolean" name="alive"><br>
+breakable_part: <input type="text" name="breakable_part"><br>
+</form>

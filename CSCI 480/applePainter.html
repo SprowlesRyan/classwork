@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Pick Rectangle by Mouse Click</title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/jquery-1.11.0.js"></script>
+    <style>
+        body{
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+	// Global variables will be visible to all functions in this script.
+	var camera, scene, renderer;
+	var leftX, rightX, bottomY, topY;
+		
+	// Call function to initialize scene contents.	
+	initScene();
+	// Call function to draw the scene repeatedly.
+	animateScene();
+
+	/*
+	 * initScene
+	 * Initializes scene to contain a triangle and a square viewed
+	 * by an orthographic camera.
+	 */
+	function initScene() 
+	{
+		// Create a new WebGL renderer that will draw the scene.
+		renderer = new THREE.WebGLRenderer();
+		// Set background color.
+		renderer.setClearColor(new THREE.Color("rgb(60,60,60)"));
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		// add the output of the renderer to the html element
+		$("#WebGL-output").append(renderer.domElement);
+        
+		// Create an empty scene container.
+		scene = new THREE.Scene();
+			
+		// Create an orthographic camera which does not
+		// make objects appear smaller as they are farther
+		// away.  Orthographic camera view is useful for 
+		// two-dimensional drawing since the Z-coordinate
+		// is simply used to determine which object appears
+		// in front of another when they overlap in XY.
+		// 
+		// Set orthographic camera view with parameters:
+		// Left edge x-coordinate (-X)
+		// Right edge x-coordinate (+X)
+		// Top edge y-coordinate (+Y)
+		// Bottom edge y-coordinate (-Z)
+		// Front clip face z-coordinate (+Z)
+		// Rear clip face z-coordinate (+Z)
+		// front clip distance < rear clip distance.
+		// Choose front and rear clip distances so that
+		// your objects lie between these two faces.
+		var aspectRatio = window.innerWidth / window.innerHeight;
+		leftX = -aspectRatio * 2.0;
+		rightX = aspectRatio * 2.0;
+		bottomY = -2;
+		topY = 2;
+		camera = new THREE.OrthographicCamera(leftX,rightX, topY,bottomY, 0, 100 );
+		camera.position.set(0, 0, 10);
+		camera.lookAt(scene.position);
+		
+		// Add event listener for mouse click event.
+		document.addEventListener('mousedown', testClick, false);
+	}
+			
+	function animateScene() 
+	{
+		requestAnimationFrame( animateScene );
+		renderer.render( scene, camera );
+	}
+	
+	function addPicture(x, y)
+	{
+	  // Confirm that at least two arguments were passed to this function.
+	  // Javascript allows any number of arguments to be passed.
+	  if(x != undefined && y != undefined)
+	  {
+	  	// Declare local variables that are visible only within this
+		// function.
+		var planeGeometry, materialImage, planeMesh;
+		
+		planeGeometry = new THREE.PlaneGeometry(1, 1);		
+		materialImage = new THREE.MeshBasicMaterial({ side:THREE.DoubleSide });			
+		var texture = THREE.ImageUtils.loadTexture("apple.png");
+		materialImage.map = texture;
+							
+		planeMesh = new THREE.Mesh( planeGeometry, materialImage );
+		planeMesh.position.set(x, y, 4);
+		scene.add( planeMesh );	  
+	  }
+	}
+	
+	function testClick(event)
+	{
+	  // Cancels any default operations browser might do on a click.
+	  // Lets us take control of handling this mouse click on the canvas.
+	  event.preventDefault();
+	  
+	  var x = 0, y = 0;
+	  if(event.clientX != undefined && event.clientY != undefined)
+	  {
+	    // Cursor coordinates begin with origin (0,0) at upper left and
+	    // end at (window width - 1, window height -1) at bottom right.
+	    x = event.clientX;
+	    y = event.clientY;
+	    
+	    x = leftX + (x/window.innerWidth)*(rightX-leftX);
+	    // Flip y-coordinate so that larger y-value is at the top to
+	    // to correspond to our sense that +Y is UP.
+	    y = window.innerHeight - y;
+	    y = bottomY + (y/window.innerHeight)*(topY-bottomY);
+	    
+	    // Call function to add another picture to the scene.
+	    addPicture(x, y);
+	  }
+	}
+
+		</script>
+	</body>
+</html>

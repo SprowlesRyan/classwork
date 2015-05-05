@@ -1,0 +1,48 @@
+def sum(list)
+	if list.empty?
+		return 0
+	else
+		first, *rest = list
+		if first.kind_of?(Array)
+			return sum(first) + sum(rest)
+		else
+			return first + sum(rest)
+		end	
+	end	
+end
+
+def remove_odds(list)
+	if list.empty?
+		return list
+	else
+		first,*rest = list
+		if first.kind_of?(Array)
+			return remove_odds(first) + remove_odds(rest)
+		elsif first.odd?
+			return remove_odds(rest)
+		else
+			return remove_odds(rest).unshift(first)
+		end	
+	end
+end	
+
+
+def digits(list)
+	if list.empty?
+		return 0
+	else
+		first, *rest = list
+		return 1 + num_items(rest)
+	end
+end
+
+def ith_digit(list, num)
+	list = list.reverse
+	return list[num]
+end
+
+def occurrences(list, num)
+	total = 0
+	
+	
+end	

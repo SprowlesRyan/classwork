@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Draw Gradient Blended Colors</title>
+    <script type="text/javascript" src="../libs/three.js"></script>
+    <script type="text/javascript" src="../libs/jquery-1.9.0.js"></script>
+    <style>
+        body{
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+	// Global variables will be visible to all functions in this script.
+	var camera, scene, renderer;
+		
+	// Call function to initialize scene contents.	
+	initScene();
+	// Call function to draw the scene.  
+	renderScene();
+
+	/*
+	 * initScene
+	 * Initializes scene to contain a triangle viewed by an orthographic 
+	 * camera.
+	 * Assign a different color to each vertex of the triangle.
+	 * WebGL interpolates (blends) the colors as it fills the interior
+	 * of the triangle.
+	 */
+	function initScene() 
+	{
+		// Create a new WebGL renderer that will draw the scene.
+		renderer = new THREE.WebGLRenderer();
+		// Set background color.
+		renderer.setClearColor(new THREE.Color("rgb(60,60,60)"));
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		// add the output of the renderer to the html element
+		$("#WebGL-output").append(renderer.domElement);
+        
+		// Create an empty scene container.
+		scene = new THREE.Scene();
+			
+		// Create an orthographic camera which does not
+		// make objects appear smaller as they are farther
+		// away.  Orthographic camera view is useful for 
+		// two-dimensional drawing since the Z-coordinate
+		// is simply used to determine which object appears
+		// in front of another when they overlap in XY.
+		// 
+		// Set orthographic camera view with parameters:
+		// Left edge x-coordinate (-X)
+		// Right edge x-coordinate (+X)
+		// Top edge y-coordinate (+Y)
+		// Bottom edge y-coordinate (-Z)
+		// Front clip face z-coordinate (+Z)
+		// Rear clip face z-coordinate (+Z)
+		// front clip distance < rear clip distance.
+		// Choose front and rear clip distances so that
+		// your objects lie between these two faces.
+		camera = new THREE.OrthographicCamera( -3,3, 3,-3, 1, 100 );
+		camera.position.set(0, 0, 10);
+		camera.lookAt(scene.position);
+			
+		// Declare local variables that are visible only within this
+		// function.
+		var triangleGeometry, materialRed, triangleMesh;
+		var squareGeometry, materialYellow, squareMesh;
+		
+		triangleGeometry = new THREE.Geometry( );
+		triangleGeometry.vertices.push(new THREE.Vector3(0,2,0));
+		triangleGeometry.vertices.push(new THREE.Vector3(-2,-2,0));
+		triangleGeometry.vertices.push(new THREE.Vector3(2,-2,0));
+		triangleGeometry.faces.push(new THREE.Face3(0, 1, 2));
+				
+		// Assign color red to face #0, vertex #0
+		triangleGeometry.faces[0].vertexColors[0] = new THREE.Color("rgb(255,0,0)");
+		// Assign color green to face #0, vertex #1
+		triangleGeometry.faces[0].vertexColors[1] = new THREE.Color("rgb(0,255,0)");
+		// Assign color blue to face #0, vertex #2
+		triangleGeometry.faces[0].vertexColors[2] = new THREE.Color("rgb(0,0,255)");
+				
+		materialColors = new THREE.MeshBasicMaterial(
+			{ vertexColors: THREE.VertexColors,
+			  side:THREE.DoubleSide });
+			  
+		triangleMesh = new THREE.Mesh( triangleGeometry, materialColors );
+		triangleMesh.position.set(0, 0, 4);
+		scene.add( triangleMesh );
+	};
+			
+		
+	/*
+ 	 * renderScene
+ 	 * Draw the scene one-time.
+ 	 */
+	function renderScene()
+	{
+		// render the scene
+		renderer.render(scene, camera);
+	}
+
+		</script>
+	</body>
+</html>

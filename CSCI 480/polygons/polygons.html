@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Example ThreeJS Draw Polygons</title>
+    <script type="text/javascript" src="C:/Users/Ryan/Desktop/Spring2014/CSCI 480/editor/js/libs/three.js"></script>
+    <script type="text/javascript" src="C:/Users/Ryan/Desktop/Spring2014/CSCI 480/editor/js/libs/jquery-1.11.0.js"></script>
+    <style>
+        body{
+            /* set margin to 0 and overflow to hidden, to go fullscreen */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Div which will hold the Output -->
+<div id="WebGL-output">
+</div>
+
+<!-- Javascript code that runs our Three.js examples -->
+<script type="text/javascript">
+
+	// Global variables will be visible to all functions in this script.
+	var camera, scene, renderer;
+		
+	// Call function to initialize scene contents.	
+	initScene();
+	// Call function to draw the scene.  
+	renderScene();
+
+	/*
+	 * initScene
+	 * Initializes scene to contain a triangle and a square viewed
+	 * by an orthographic camera.
+	 */
+	function initScene() 
+	{
+		// Create a new WebGL renderer that will draw the scene.
+		renderer = new THREE.WebGLRenderer();
+		// Set background color.
+		renderer.setClearColor(new THREE.Color("rgb(60,60,60)"));
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		// add the output of the renderer to the html element
+		$("#WebGL-output").append(renderer.domElement);
+        
+		// Create an empty scene container.
+		scene = new THREE.Scene();
+			
+		// Create an orthographic camera which does not
+		// make objects appear smaller as they are farther
+		// away.  Orthographic camera view is useful for 
+		// two-dimensional drawing since the Z-coordinate
+		// is simply used to determine which object appears
+		// in front of another when they overlap in XY.
+		// 
+		// Set orthographic camera view with parameters:
+		// Left edge x-coordinate (-X)
+		// Right edge x-coordinate (+X)
+		// Top edge y-coordinate (+Y)
+		// Bottom edge y-coordinate (-Z)
+		// Front clip face z-coordinate (+Z)
+		// Rear clip face z-coordinate (+Z)
+		// front clip distance < rear clip distance.
+		// Choose front and rear clip distances so that
+		// your objects lie between these two faces.
+		camera = new THREE.OrthographicCamera( -3,3, 3,-3, 1, 100 );
+		camera.position.set(0, 0, 10);
+		camera.lookAt(scene.position);
+			
+		// Declare local variables that are visible only within this
+		// function.
+		var triangleGeometry, materialRed, triangleMesh;
+		var squareGeometry, materialYellow, squareMesh;
+		
+		triangleGeometry = new THREE.Geometry( );
+		triangleGeometry.vertices.push(new THREE.Vector3(0,1,0));
+		triangleGeometry.vertices.push(new THREE.Vector3(-1,-1,0));
+		triangleGeometry.vertices.push(new THREE.Vector3(1,-1,0));
+		triangleGeometry.faces.push(new THREE.Face3(0, 1, 2));
+				
+		// Create a basic red material color.
+		// Specify RGB color values between 0-255, inclusive.
+		// The DoubleSide option forces WebGL to draw polygons
+		// regardless of whether their vertices were listed
+		// in counter-clockwise order.
+		materialRed = new THREE.MeshBasicMaterial( 
+		           { color: new THREE.Color("rgb(250,0,0)"), 
+			     side: THREE.DoubleSide } );
+		triangleMesh = new THREE.Mesh( triangleGeometry, materialRed );
+		// Set XYZ position of the triangle.
+		triangleMesh.position.set(-1.5, 0, 4);
+		scene.add( triangleMesh );
+				
+		// In WebGL and Three.JS, unlike full OpenGL, we can only
+		// draw triangles.  So, we use two triangles to draw a square.
+		// Face4 was recently deprecated by Three.JS.
+		var squareGeometry = new THREE.Geometry();
+		squareGeometry.vertices.push(new THREE.Vector3(-1, 1, 0));
+		squareGeometry.vertices.push(new THREE.Vector3(-1, -1, 0));
+		squareGeometry.vertices.push(new THREE.Vector3(1, -1, 0));
+		squareGeometry.vertices.push(new THREE.Vector3(1, 1, 0));
+		squareGeometry.faces.push(new THREE.Face3(0, 1, 2));	
+		squareGeometry.faces.push(new THREE.Face3(0, 2, 3));
+				
+		materialYellow = new THREE.MeshBasicMaterial( { side:THREE.DoubleSide } );
+		materialYellow.color = new THREE.Color("rgb(200,200,0)");
+		squareMesh = new THREE.Mesh( squareGeometry, materialYellow );
+		squareMesh.position.set(1.5, 0, 4);
+		scene.add( squareMesh );
+	};
+		
+	/*
+ 	 * renderScene
+ 	 * Draw the scene one-time.
+ 	 */
+	function renderScene()
+	{
+		// render the scene
+		renderer.render(scene, camera);
+	}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Image Rectangle</title>
+		<meta charset="utf-8">
+		<style>
+			body {
+				margin: 0px;
+				background-color: #000000;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>" 
+
+		<script>
+
+	// Global variables will be visible to all functions in this script.
+	var camera, scene, renderer;
+		
+	// Call function to initialize scene contents.	
+	initScene();
+	// Call function to draw the scene repeatedly.
+	animateScene();
+
+	/*
+	 * initScene
+	 * Initializes scene to contain a triangle and a square viewed
+	 * by an orthographic camera.
+	 */
+	function initScene() 
+	{
+		renderer = new THREE.WebGLRenderer();
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		document.body.appendChild( renderer.domElement );
+
+        
+		// Create an empty scene container.
+		scene = new THREE.Scene();
+			
+		// Create an orthographic camera which does not
+		// make objects appear smaller as they are farther
+		// away.  Orthographic camera view is useful for 
+		// two-dimensional drawing since the Z-coordinate
+		// is simply used to determine which object appears
+		// in front of another when they overlap in XY.
+		// 
+		// Set orthographic camera view with parameters:
+		// Left edge x-coordinate (-X)
+		// Right edge x-coordinate (+X)
+		// Top edge y-coordinate (+Y)
+		// Bottom edge y-coordinate (-Z)
+		// Front clip face z-coordinate (+Z)
+		// Rear clip face z-coordinate (+Z)
+		// front clip distance < rear clip distance.
+		// Choose front and rear clip distances so that
+		// your objects lie between these two faces.
+		var aspectRatio = window.innerWidth / window.innerHeight;
+		var leftX = -aspectRatio * 2.0;
+		var rightX = aspectRatio * 2.0;
+		camera = new THREE.OrthographicCamera(leftX,rightX, 2,-2, 0, 100 );
+		camera.position.set(0, 0, 10);
+		camera.lookAt(scene.position);
+			
+		// Declare local variables that are visible only within this
+		// function.
+		var planeGeometry, materialImage, planeMesh;
+		
+		planeGeometry = new THREE.PlaneGeometry(1, 1);		
+		materialImage = new THREE.MeshBasicMaterial({ side:THREE.DoubleSide });			
+		var texture = THREE.ImageUtils.loadTexture("apple.png");
+		materialImage.map = texture;
+							
+		planeMesh = new THREE.Mesh( planeGeometry, materialImage );
+		planeMesh.position.set(0, 0, 4);
+		scene.add( planeMesh );
+		
+		window.addEventListener( 'resize', onWindowResize, false );
+	}
+		
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+	
+	function animateScene() 
+	{
+		requestAnimationFrame( animateScene );
+		renderer.render( scene, camera );
+	}
+
+		</script>
+	</body>
+</html>

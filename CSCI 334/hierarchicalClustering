@@ -1,0 +1,69 @@
+distance <- function(sample1,sample2){
+  return(sqrt(sum((sample1-sample2)**2)))
+}
+
+upgma <- function(samples1, samples2){
+sm = 0
+for( i in 1: nrow(samples1)){
+	for(j in 1:nrow(samples2)){
+		sm = sm + distance(samples1[i,],samples2[j,])
+	}
+}
+sm = sm/(nrow(samples1)*nrow(samples2))
+return(sm)
+}
+
+select.two <- function(groups) {
+  distances <- c()
+  firstValues <- c()
+  secondValues <- c()
+  current = 1
+  for(i in 1:length(groups)){
+  	if(i + 1 > length(groups)){
+		break
+  		}
+  	for(j in i+1: length(groups)){
+  		firstValues[current] = i
+  		secondValues[current] = j
+  		distances[current] <- upgma(groups[[i]],groups[[j]])
+  		current = current + 1
+  		}
+	}
+	minDistance = which.min(distances)
+	return(firstValues[minDistance],secondValues[minDistance],distance(minDistance))
+}
+
+hierarchical.cluster <- function(samples,threshold) {
+	groups = list()
+	for(i in 1:nrow(samples)){
+		groups[[i]] = samples[i,]
+	}
+	while(length(groups) > 1){
+		results = select.two(groups)
+	if(results[3] > threshold){
+		break
+		}
+	group1 = groups[[results[1]]]
+	group2 = groups[[results[2]]]
+	groups = groups[[-results[1:2]]]
+	new.group = rbind(group1,group2)
+	groups[[length(groups)+1]] = new.group
+	}
+return(groups)
+}
+select 2 closest groups
+groups are a list
+
+samples matrix
+1.2 3.4 2.3
+1.4 3.2 8.6
+3.2 3.1 8.9
+1.3 1.5 4.5
+split matrix into multiple
+returns which to group together
+1,3 distance measured by UPGMA
+
+stop grouping things together when they
+are above a threshhold
+
+remove the 2 combining, append new to the end

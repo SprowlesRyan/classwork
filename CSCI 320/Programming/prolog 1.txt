@@ -1,0 +1,3 @@
+add(X,[],[])
+add(X,[H|T], R) :- add(H,T,R)
+add(X,[H|T],[H|R]) :- add(X,T,R)

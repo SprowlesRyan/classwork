@@ -1,0 +1,12 @@
+Ruby assign outputs
+Composing f and g with a call of 3: 11
+Composing f and g with a call of 5: 17
+Composing f and g with a call of 10: 32
+Composing f and g with a call of -4: -10
+Constructing functions h, i, j  with a call of 3: [9, 6, 1]
+Constructing functions h, i, j  with a call of 4: [16, 8, 2]
+Constructing functions h, i, j  with a call of 7: [49, 14, 3]
+Constructing functions h, i, j  with a call of -5: [25, -10, -3]
+Applying a function to the numbers 1, 2, 3: [1, 4, 9]
+Applying a function to the numbers 12, -4, 13, 0: [144, 16, 169, 0]
+Applying a function to the numbers 5, 1, 7, 2, 4, 5, 0: [25, 1, 49, 4, 16, 25, 0]
